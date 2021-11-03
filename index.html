@@ -85,30 +85,25 @@
       let hotspotIndex = 0
       let ambianceIndex = 0
 
-      modelViewer.addEventListener('load', (event) => {
-        switchToTryOnMode()
-        console.log("loaded");
-      });
-
+      
       var video = document.querySelector("#videoElement");
-
+      
       if (navigator.mediaDevices.getUserMedia) {
-        
-        
         navigator.mediaDevices.getUserMedia({ video: true })
         .then(function (stream) {
           video.srcObject = stream;
           
           console.log("HERE:", video.scrollWidth, video.scrollHeight);
-          
-          
-          
         })
         .catch(function (err0r) {
           console.log("Something went wrong!");
-        });
-        
+        });        
       }
+      
+      modelViewer.addEventListener('load', (event) => {
+        switchToTryOnMode()
+        console.log("loaded");
+      });
 
       function pauseTurntableRotation() {
         // This pauses turntable rotation
@@ -187,7 +182,7 @@
         let target = modelViewer.getCameraTarget()
         target.y -= 0.8
         modelViewer.setAttribute("camera-target", target.toString());
-        modelViewer.setAttribute("field-of-view", "90deg");
+        modelViewer.setAttribute("field-of-view", "180deg");
         modelViewer.removeAttribute("camera-controls");
       }
 
