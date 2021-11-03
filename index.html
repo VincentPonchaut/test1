@@ -85,10 +85,10 @@
       let hotspotIndex = 0
       let ambianceIndex = 0
 
-      // modelViewer.addEventListener('load', (event) => {
-      //   initialOrbit = modelViewer.getCameraOrbit();
-      //   console.log("loaded");
-      // });
+      modelViewer.addEventListener('load', (event) => {
+        switchToTryOnMode()
+        console.log("loaded");
+      });
 
       var video = document.querySelector("#videoElement");
 
@@ -117,6 +117,12 @@
             detail: { source: "user-interaction" },
           })
         );
+      }
+      function stopTurntableRotation() {
+        modelViewer.autoRotate = false;
+      }
+      function startTurntableRotation() {
+        modelViewer.autoRotate = true;
       }
             
       function changeCameraTarget() {
@@ -172,6 +178,17 @@
 
         modelViewer.setAttribute('skybox-image', "");
         ambianceIndex = 0;
+
+        // Animate glasses pos & zoom
+        pauseTurntableRotation()
+        stopTurntableRotation()
+        modelViewer.interactionPrompt = "none"
+        resetCamera()
+        let target = modelViewer.getCameraTarget()
+        target.y -= 0.8
+        modelViewer.setAttribute("camera-target", target.toString());
+        modelViewer.setAttribute("field-of-view", "90deg");
+        modelViewer.removeAttribute("camera-controls");
       }
 
       function switchToViewerMode() {
@@ -185,6 +202,16 @@
         document.querySelector('#switchToViewerBtn').style.display = 'none';
 
         ambianceIndex = 0;
+
+        pauseTurntableRotation()
+        startTurntableRotation()
+        modelViewer.interactionPrompt = "auto"
+        resetCamera()
+        // let target = modelViewer.getCameraTarget()
+        // target.y += 0.8
+        // modelViewer.setAttribute("camera-target", target.toString());
+        // modelViewer.setAttribute("field-of-view", "90deg");
+        modelViewer.setAttribute("camera-controls", "");
       }
 
       function changeAmbiance() {
@@ -211,50 +238,8 @@
         }
       }
 
-      // // VIDEO 
-      // (function() {
+      
 
-      // var streaming = false,
-      //     video        = document.querySelector('#videoElement'),
-      //     cover        = document.querySelector('#cover'),
-      //     width = 0,
-      //     height = 600;
-
-      // navigator.getMedia = ( navigator.getUserMedia ||
-      //                       navigator.webkitGetUserMedia ||
-      //                       navigator.mozGetUserMedia ||
-      //                       navigator.msGetUserMedia);
-
-      // navigator.getMedia(
-      //   {
-      //     video: true,
-      //     audio: false
-      //   },
-      //   function(stream) {
-      //     if (navigator.mozGetUserMedia) {
-      //       video.mozSrcObject = stream;
-      //     } else {
-      //       var vendorURL = window.URL || window.webkitURL;
-      //       // video.src = vendorURL.createObjectURL(stream);
-      //       video.srcObject = stream;
-      //     }
-      //     video.play();
-      //   },
-      //   function(err) {
-      //     console.log("An error occured! " + err);
-      //   }
-      // );
-
-      // video.addEventListener('canplay', function(ev){
-      //   if (!streaming) {
-      //     width = video.videoWidth / (video.videoHeight/height);
-      //     video.setAttribute('width', width);
-      //     video.setAttribute('height', height);
-      //     streaming = true;
-      //   }
-      // }, false);
-
-      // })();
     </script>
     <script type="module">
       const modelViewer = document.querySelector("#v");
